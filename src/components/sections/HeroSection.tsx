@@ -1,15 +1,25 @@
-﻿// @phase: Fase1
-
+﻿'use client';
 import { MutationZone } from '../ui/MutationZone';
-import { ManimVideoPlaceholder } from '../ui/ManimVideoPlaceholder';
+import { ManimVideo } from '../ui/ManimVideo';
 import { useSession } from '../providers/SessionProvider';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 export function HeroSection() {
   const { state } = useSession();
+  const prefersReducedMotion = useReducedMotion();
+
   return (
     <section className="relative w-full pt-32 pb-20 px-6 max-w-7xl mx-auto flex flex-col items-center text-center">
-      <div className="absolute inset-0 -z-10 w-full h-[600px] pointer-events-none opacity-20">
-         <ManimVideoPlaceholder zoneId="HERO_BG" uiPhase={state.phase} />
+      <div className="absolute inset-0 -z-10 w-full h-[600px] flex justify-center pointer-events-none">
+         <ManimVideo 
+            src="/videos/pipeline_ingesta.mp4"
+            zoneId="hero" 
+            zonePriority={1}
+            uiPhase={state.phase}
+            prefersReducedMotion={prefersReducedMotion}
+            allowedPhases={['ANALYZING']}
+            className="w-full max-w-4xl aspect-video opacity-80"
+         />
       </div>
 
       <MutationZone 

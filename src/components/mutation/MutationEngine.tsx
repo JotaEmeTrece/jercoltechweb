@@ -1,6 +1,4 @@
-﻿// @phase: Fase1
-
-'use client';
+﻿'use client';
 import { useEffect, useRef } from 'react';
 import { useSession } from '../providers/SessionProvider';
 
@@ -17,20 +15,24 @@ export function MutationEngine() {
       return;
     }
 
-    // Limit to max 4 simultaneous mutations
     if (activeMutationsCount >= 4) return;
 
     const processNext = async () => {
       const nextMutation = state.pendingMutations[0];
       const now = Date.now();
-      const targetCooldown = lastMutationTime.current[nextMutation.targetId] || 0;
 
-      // Enforce 1500ms cooldown per zone
+      if (state.phase === 'ANALYZING' && activeMutationsCount === 0) {
+        const elapsed = now - (state.analyzingStartedAt || now);
+        if (elapsed < 1500) {
+          await new Promise(r => setTimeout(r, 1500 - elapsed));
+        }
+      }
+
+      const targetCooldown = lastMutationTime.current[nextMutation.targetId] || 0;
       if (now - targetCooldown < 1500) {
         await new Promise(r => setTimeout(r, 1500 - (now - targetCooldown)));
       }
 
-      // Escalonado si hay multiples (150ms)
       if (state.pendingMutations.length > 2) {
         await new Promise(r => setTimeout(r, 150));
       }
@@ -43,7 +45,7 @@ export function MutationEngine() {
     };
 
     processNext();
-  }, [state.pendingMutations, activeMutationsCount, state.phase, dispatch]);
+  }, [state.pendingMutations, activeMutationsCount, state.phase, dispatch, state.analyzingStartedAt]);
 
-  return null; // Orchestrator silencioso
+  return null;
 }

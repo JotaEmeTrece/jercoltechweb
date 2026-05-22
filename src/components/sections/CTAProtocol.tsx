@@ -1,10 +1,18 @@
-﻿import { MutationZone } from '../ui/MutationZone';
+﻿'use client';
+import { MutationZone } from '../ui/MutationZone';
+import { ManimVideo } from '../ui/ManimVideo';
+import { useSession } from '../providers/SessionProvider';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 export function CTAProtocol() {
+  const { state } = useSession();
+  const prefersReducedMotion = useReducedMotion();
+
   return (
-    <section className="w-full py-24 px-6 flex justify-center">
+    <section className="relative w-full py-24 px-6 flex flex-col items-center justify-center">
       <MutationZone
         targetId="cta-btn"
+        className="z-10"
         defaultContent={
           <button className="bg-white text-black font-sans px-8 py-4 rounded-full font-medium hover:scale-105 transition-transform">
             Agendar Sesión de Arquitectura
@@ -15,6 +23,16 @@ export function CTAProtocol() {
             {text}
           </button>
         )}
+      />
+
+      <ManimVideo 
+         src="/videos/consolidacion_mutacion.mp4"
+         zoneId="cta" 
+         zonePriority={5}
+         uiPhase={state.phase}
+         prefersReducedMotion={prefersReducedMotion}
+         allowedPhases={['MUTATED']}
+         className="w-full max-w-[400px] aspect-video absolute top-10 pointer-events-none mix-blend-screen opacity-50"
       />
     </section>
   );

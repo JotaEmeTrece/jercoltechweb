@@ -1,6 +1,4 @@
-﻿// @phase: Fase1
-
-'use client';
+﻿'use client';
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
 import { UIPhase, UIState, SimulationLog, MutationDirective } from '@/lib/types';
 
@@ -12,6 +10,7 @@ interface SessionState {
   pendingMutations: MutationDirective[];
   confidenceScore: number;
   totalMutations: number;
+  analyzingStartedAt: number | null;
 }
 
 type Action =
@@ -32,12 +31,19 @@ const initialState: SessionState = {
   pendingMutations: [],
   confidenceScore: 0,
   totalMutations: 0,
+  analyzingStartedAt: null,
 };
 
 function sessionReducer(state: SessionState, action: Action): SessionState {
   switch (action.type) {
     case 'FORM_SUBMITTED':
-      return { ...state, phase: 'ANALYZING', sessionId: action.payload.sessionId, logs: [] };
+      return {
+        ...state,
+        phase: 'ANALYZING',
+        sessionId: action.payload.sessionId,
+        logs: [],
+        analyzingStartedAt: Date.now()
+      };
     case 'MUTATION_DISPATCHED':
       return { 
         ...state, 
