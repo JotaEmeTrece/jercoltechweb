@@ -1,0 +1,13 @@
+﻿src/components/form/BusinessProfileForm.tsx
+src/components/mutation/MutationEngine.tsx
+src/components/providers/SessionProvider.tsx
+src/components/sections/CTAProtocol.tsx
+src/components/sections/EngineDemoSection.tsx
+src/components/sections/HeroSection.tsx
+src/components/telemetry/TelemetryPanel.tsx
+src/components/ui/ManimVideoPlaceholder.tsx
+src/components/ui/MutationZone.tsx
+src/components/ui/PhaseIndicator.tsx
+src/hooks/useMutationPolicy.ts
+src/hooks/useTelemetryStream.ts
+src/lib/types/index.ts
